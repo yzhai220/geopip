@@ -34,5 +34,3 @@ List of subfolders:
 5. model: substitution model configuration files for Java code. The GTR and HKY85 model are provided.
 
 6. data: Molluscan data used in the paper, downloaded from http://www.rna.icmb.utexas.edu/SIM/4D/Mollusk/alignment.gb, and then changed to the fasta format.
-# geopip
-# geopip
