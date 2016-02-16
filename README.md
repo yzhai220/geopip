@@ -2,7 +2,7 @@ Supplementary Source Code and Examples for
 
 “A Poissonian model of indel rate variation for phylogenetic tree inference”
 
-by Yongliang Zhai and Alexandre Bouchard-Côte.
+by Yongliang Zhai and Alexandre Bouchard-Côté.
 
 Department of Statistics, the University of British Columbia, Vancouver, Canada.
 
