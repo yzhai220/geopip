@@ -1,0 +1,88 @@
+[
+    {
+        "states": [
+            "A"
+        ], 
+        "features": [
+            "base=A"
+        ]
+    }, 
+    {
+        "states": [
+            "C"
+        ], 
+        "features": [
+            "base=C"
+        ]
+    }, 
+    {
+        "states": [
+            "G"
+        ], 
+        "features": [
+            "base=G"
+        ]
+    }, 
+    {
+        "states": [
+            "T"
+        ], 
+        "features": [
+            "base=T"
+        ]
+    }, 
+    {
+        "states": [
+            "A", 
+            "C"
+        ], 
+        "features": [
+            "isTransition=AC"
+        ]
+    }, 
+    {
+        "states": [
+            "A", 
+            "G"
+        ], 
+        "features": [
+            "isTransition=AG"
+        ]
+    }, 
+    {
+        "states": [
+            "A", 
+            "T"
+        ], 
+        "features": [
+            "isTransition=AT"
+        ]
+    }, 
+    {
+        "states": [
+            "C", 
+            "G"
+        ], 
+        "features": [
+            "isTransition=CG"
+        ]
+    }, 
+    {
+        "states": [
+            "C", 
+            "T"
+        ], 
+        "features": [
+            "isTransition=CT"
+        ]
+    }, 
+    {
+        "states": [
+            "G", 
+            "T"
+        ], 
+        "features": [
+            "isTransition=GT"
+        ]
+    }
+]

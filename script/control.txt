@@ -1,0 +1,33 @@
+[TYPE] NUCLEOTIDE 1
+
+[MODEL]    nb1        //  Evolutionary models are defined in [MODEL] blocks.
+  [submodel]  HKY 2        //  Here the substitution model is simply set as HKY85.
+  [statefreq] 0.25 0.25 0.25 0.25  
+  [indelmodel]   NB  0.1 1  //  Geometric indel length distribution.
+  [insertrate]   0.05
+  [deleterate]   0.05
+
+[MODEL]    nb2        //  Evolutionary models are defined in [MODEL] blocks.
+  [submodel]  HKY 2        //  Here the substitution model is simply set as HKY85.
+  [statefreq] 0.25 0.25 0.25 0.25  
+  [indelmodel]   NB  0.1 1  //  Geometric indel length distribution.
+  [insertrate]   0.25
+  [deleterate]   0.25
+
+
+
+[TREE] t16  ((((seq1:0.05,seq2:0.05):0.05,(seq3:0.05,seq4:0.05):0.05):0.05,((seq5:0.05,seq6:0.05):0.05,(seq7:0.05,seq8:0.05):0.05):0.05):0.05,(((seq9:0.05,seq10:0.05):0.05,(seq11:0.05,seq12:0.05):0.05):0.05,((seq13:0.05,seq14:0.05):0.05,(seq15:0.05,seq16:0.05):0.05):0.05):0.05);        //  User trees are defined here
+
+
+[PARTITIONS] partition1             //  [PARTITIONS] blocks say which models go with
+  [t16 nb1 50]          //  which trees and define the length of the
+
+[PARTITIONS] partition2             //  [PARTITIONS] blocks say which models go with
+  [t16 nb2 50]          //  which trees and define the length of the
+
+
+[EVOLVE] partition1 1 msa1
+         partition2 1 msa2
+
+// The true alignment will be output in a file named outputname_TRUE.phy
+// The unaligned sequences will be output in a file named outputname.fas

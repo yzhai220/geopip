@@ -1,0 +1,26 @@
+[
+	{
+		"states" : ["A"], 
+		"features" : ["base=A"]
+	},
+	{
+		"states" : ["C"], 
+		"features" : ["base=C"]
+	},
+	{
+		"states" : ["G"], 
+		"features" : ["base=G"]
+	},
+	{
+		"states" : ["T"], 
+		"features" : ["base=T"]
+	},
+	{
+		"states" : ["A","G"], 
+		"features" : ["isTransition"]
+	},
+	{
+		"states" : ["C","T"], 
+		"features" : ["isTransition"]
+	}
+]
