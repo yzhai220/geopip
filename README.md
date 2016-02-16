@@ -1,6 +1,9 @@
 Supplementary Source Code and Examples for 
+
 “A Poissonian model of indel rate variation for phylogenetic tree inference”
+
 by Yongliang Zhai and Alexandre Bouchard-Côte.
+
 Department of Statistics, the University of British Columbia, Vancouver, Canada.
 
 Email: y.zhai@stat.ubc.ca, bouchard@stat.ubc.ca
@@ -33,4 +36,4 @@ List of subfolders:
 
 5. model: substitution model configuration files for Java code. The GTR and HKY85 model are provided.
 
-6. data: Molluscan data used in the paper, downloaded from http://www.rna.icmb.utexas.edu/SIM/4D/Mollusk/alignment.gb, and then changed to the fasta format.
+6. data: Molluscan data used in the paper. This data set was downloaded from http://www.rna.icmb.utexas.edu/SIM/4D/Mollusk/alignment.gb, and then changed to the fasta format after removing non nucleotide columns.
