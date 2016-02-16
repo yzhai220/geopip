@@ -58,6 +58,7 @@ if not os.path.exists(execsLoc):
 subFolderPath = resultFolder + '/runs'
 if not os.path.exists(subFolderPath):
     os.makedirs(subFolderPath)
+rFileLoc = dir_source
 
 ###############################################################################
 # Start a new simulation using the GeoPIP model.
@@ -135,7 +136,7 @@ qMatStart = qMatPhyml
 
 # 2. CTMC+NJ.
 time2 = time()
-qMatCTMC1, bDictCTMC1, treeCTMC1, nllkCTMC1 = opt_ctmc_full(qMatStart, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, cList, qRates=[1.], suffix='_ctmc_1rate', updateQ=updateQ, tol=1.e-2, bTol=1.e-3, iterMax=100)
+qMatCTMC1, bDictCTMC1, treeCTMC1, nllkCTMC1 = opt_ctmc_full(qMatStart, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, rFileLoc, cList, qRates=[1.], suffix='_ctmc_1rate', updateQ=updateQ, tol=1.e-2, bTol=1.e-3, iterMax=100)
 time2 = time() - time2
 
 # Output results.
@@ -146,7 +147,7 @@ output_qmat(qMatCTMC1, dataLoc, suffix='_ctmc_1rate')
 # Random start rates.
 rateStart = pip_start_data(multiAlign)
 time3 = time()
-rateEstPIP, qMatEstPIP, bDictEstPIP, treeEstPIP = opt_pip_full(rateStart, qMatStart, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, cList, qRates=[1.], suffix='_pip', updateQ=updateQ, updateRate=True, updateRateFixdRateTimesb=True, tol=1.e-2, bTol=1.e-3, iterMax=100)
+rateEstPIP, qMatEstPIP, bDictEstPIP, treeEstPIP = opt_pip_full(rateStart, qMatStart, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, rFileLoc, cList, qRates=[1.], suffix='_pip', updateQ=updateQ, updateRate=True, updateRateFixdRateTimesb=True, tol=1.e-2, bTol=1.e-3, iterMax=100)
 time3 = time() - time3
 
 # Output results.
@@ -171,7 +172,7 @@ lenSegsStart = lenSegs
 
 # Run GeoPIP+NJ.
 time4 = time()
-bDictEst1, qMatEst1, segRateDictEst1, alignsInSegEst1, pEst1, piProbRatesEst1, ratesListEst1, lenSegsEst1, treeEst1, nllk1 = opt_geopip_full(m, pStart, qMatStart, segRateDictStart, piProbRatesStart, ratesListStart, multiAlign, lenSegsStart, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, cList, suffix=geopipSuffix, updateQ=updateQ, updateSeg=True, updateRate=True, updateRateFixdRateTimesTau=True, tol=1.e-2, bTol=1.e-3, iterMax=100)
+bDictEst1, qMatEst1, segRateDictEst1, alignsInSegEst1, pEst1, piProbRatesEst1, ratesListEst1, lenSegsEst1, treeEst1, nllk1 = opt_geopip_full(m, pStart, qMatStart, segRateDictStart, piProbRatesStart, ratesListStart, multiAlign, lenSegsStart, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, rFileLoc, cList, suffix=geopipSuffix, updateQ=updateQ, updateSeg=True, updateRate=True, updateRateFixdRateTimesTau=True, tol=1.e-2, bTol=1.e-3, iterMax=100)
 time4 = time() - time4
 
 # Output results.
@@ -203,7 +204,7 @@ segRateDictStart = {0: (iRateMean, dRateMean)}
 
 # Run GeoPIP+NJ>
 time5 = time()
-bDictEst2, qMatEst2, segRateDictEst2, alignsInSegEst2, pEst2, piProbRatesEst2, ratesListEst2, lenSegsEst2, treeEst2, nllk2 = opt_geopip_full(m, pStart, qMatStart, segRateDictStart, piProbRatesStart, ratesListStart, multiAlign, lenSegsStart, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, cList, suffix='_geopip', updateQ=updateQ, updateSeg=True, updateRate=True, updateRateFixdRateTimesTau=True, tol=1.e-2, bTol=1.e-3, iterMax=100)
+bDictEst2, qMatEst2, segRateDictEst2, alignsInSegEst2, pEst2, piProbRatesEst2, ratesListEst2, lenSegsEst2, treeEst2, nllk2 = opt_geopip_full(m, pStart, qMatStart, segRateDictStart, piProbRatesStart, ratesListStart, multiAlign, lenSegsStart, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, rFileLoc, cList, suffix='_geopip', updateQ=updateQ, updateSeg=True, updateRate=True, updateRateFixdRateTimesTau=True, tol=1.e-2, bTol=1.e-3, iterMax=100)
 time5 = time() - time5
 
 # Output results.

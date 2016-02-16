@@ -9,7 +9,7 @@ from io_json import *
 from align_util import *
 from pip_util import pi_from_qmat, q_to_qext
 from pip_msa import logprob_align, logprob_msa, prob_msa_one_site
-from pair_dist_tree import get_out_name_dist_tree_files, get_rscript, nj_tree_from_bdict_using_r
+from tree_util import get_out_name_dist_tree_files, get_rscript, nj_tree_from_bdict_using_r
 
 
 def mle_irate_given_drate(dRate, tree, pc0, mLen):
@@ -231,14 +231,14 @@ def opt_qmat_em_full(qMat, cList, inputLoc, outputLoc, javaDirectory, modelDirec
     return qMatNew, piProbNew
 
 
-def opt_pip_full(rate, qMat, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, cList, qRates=[1.], suffix='', updateQ=True, updateRate=True, updateRateFixdRateTimesb=True, tol=1.e-2, bTol=1.e-3, iterMax=100):
+def opt_pip_full(rate, qMat, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, rFileLoc, cList, qRates=[1.], suffix='', updateQ=True, updateRate=True, updateRateFixdRateTimesb=True, tol=1.e-2, bTol=1.e-3, iterMax=100):
     """
     optimization for all parameters: iRate, dRate, qMat, tree (bDict) in PIP
     updating in iRate and dRate, qMat, tree (bDict) iteratively
     estimate bDict first given other, so starting bDict (tree) is not needed
     """
     outNameLoc, outDistLoc, outTreeLoc = get_out_name_dist_tree_files(dataLoc, suffix)
-    rCodeNj = get_rscript(outNameLoc, outDistLoc, outTreeLoc)
+    rCodeNj = get_rscript(outNameLoc, outDistLoc, outTreeLoc, rFileLoc)
     print 'simulation run: %s' % (inputLoc)
     # directory for runing EM
     alignInSeg = pair_align_from_multi_align(multiAlign)

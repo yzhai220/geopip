@@ -41,7 +41,7 @@ cListOne = ['?']
 nList = len(cList)
 
 # Whether the rate matrix Q is updated or not.
-updateQ = True
+updateQ = False
 
 # Result folder directory.
 resultFolder = dir_main + '/result/muscle_test'
@@ -61,6 +61,7 @@ if not os.path.exists(execsLoc):
 subFolderPath = resultFolder + '/runs'
 if not os.path.exists(subFolderPath):
     os.makedirs(subFolderPath)
+rFileLoc = dir_source
 
 
 ###############################################################################
@@ -144,7 +145,7 @@ qMatStart = qMatPhyml
 nStartValue = 1
 
 # CTMC only with one sub rate
-qMatCTMC1, bDictCTMC1, treeCTMC1, nllkCTMC1 = opt_ctmc_full(qMatStart, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, cList, qRates=[1.], suffix='_ctmc_1rate', updateQ=updateQ, tol=1.e-2, bTol=1.e-4, iterMax=100)
+qMatCTMC1, bDictCTMC1, treeCTMC1, nllkCTMC1 = opt_ctmc_full(qMatStart, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, rFileLoc, cList, qRates=[1.], suffix='_ctmc_1rate', updateQ=updateQ, tol=1.e-2, bTol=1.e-4, iterMax=100)
 
 write_dist_from_bdict(bDictCTMC1, dataLoc, suffix='_ctmc_1rate')
 output_qmat(qMatCTMC1, dataLoc, suffix='_ctmc_1rate')
@@ -153,7 +154,7 @@ output_qmat(qMatCTMC1, dataLoc, suffix='_ctmc_1rate')
 qRates = mean_values(4, alpha)
 
 # CTMC only with 4 sub rates
-qMatCTMC4, bDictCTMC4, treeCTMC4, nllkCTMC4 = opt_ctmc_full(qMatStart, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, cList, qRates=qRates, suffix='_ctmc_4rate', updateQ=updateQ, tol=1.e-2, bTol=1.e-4, iterMax=100)
+qMatCTMC4, bDictCTMC4, treeCTMC4, nllkCTMC4 = opt_ctmc_full(qMatStart, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, rFileLoc, cList, qRates=qRates, suffix='_ctmc_4rate', updateQ=updateQ, tol=1.e-2, bTol=1.e-4, iterMax=100)
 
 # Output results.
 write_dist_from_bdict(bDictCTMC4, dataLoc, suffix='_ctmc_4rate')
@@ -163,7 +164,7 @@ output_qmat(qMatCTMC4, dataLoc, suffix='_ctmc_4rate')
 rateStart = pip_start_data(multiAlign)
 
 time2 = time()
-rateEstPIP, qMatEstPIP, bDictEstPIP, treeEstPIP = opt_pip_full(rateStart, qMatStart, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, cList, qRates=[1.], suffix='_pip', updateQ=updateQ)
+rateEstPIP, qMatEstPIP, bDictEstPIP, treeEstPIP = opt_pip_full(rateStart, qMatStart, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, rFileLoc, cList, qRates=[1.], suffix='_pip', updateQ=updateQ)
 time2 = time() - time2
 
 # Output results.
@@ -182,7 +183,7 @@ bDictEstPIPOne = opt_nlists_bonly(pairsList, pairAlignOne, segRateDictPIP, piPro
 
 # Output results.
 outNameLoc, outDistLoc, outTreeLoc = get_out_name_dist_tree_files(dataLoc, suffix='_pip_no_sub')
-rCodeNj = get_rscript(outNameLoc, outDistLoc, outTreeLoc)
+rCodeNj = get_rscript(outNameLoc, outDistLoc, outTreeLoc, rFileLoc)
 tree_use_r_for_unknown_number_of_leaves(bDictEstPIPOne, pairsList, rCodeNj, dataLoc, outTreeLoc, suffix='_pip_no_sub', rooted=True)
 
 write_dist_from_bdict(bDictEstPIPOne, dataLoc, suffix='_pip_no_sub')
@@ -209,7 +210,7 @@ segRateDictStart = {0: (iRateMean, dRateMean)}
 geopipSuffix = '_geopip_'+str(m)
 
 time3 = time()
-bDictEst1, qMatEst1, segRateDictEst1, alignsInSegEst1, pEst1, piProbRatesEst1, ratesListEst1, lenSegsEst1, treeEst1, nllk1 = opt_geopip_full(m, pStart, qMatStart, segRateDictStart, piProbRatesStart, ratesListStart, multiAlign, lenSegsStart, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, cList, suffix=geopipSuffix, updateQ=updateQ, updateSeg=True, updateRate=True, updateRateFixdRateTimesTau=True, tol=1.e-2, bTol=1.e-3, iterMax=100)
+bDictEst1, qMatEst1, segRateDictEst1, alignsInSegEst1, pEst1, piProbRatesEst1, ratesListEst1, lenSegsEst1, treeEst1, nllk1 = opt_geopip_full(m, pStart, qMatStart, segRateDictStart, piProbRatesStart, ratesListStart, multiAlign, lenSegsStart, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, rFileLoc, cList, suffix=geopipSuffix, updateQ=updateQ, updateSeg=True, updateRate=True, updateRateFixdRateTimesTau=True, tol=1.e-2, bTol=1.e-3, iterMax=100)
 time3 = time() - time3
 
 # Output results.
@@ -236,7 +237,7 @@ bDictEstGeoPIPOne = opt_nlists_bonly(pairsList, pairAlignOne, segRateDictEst1, p
 
 geopipOneSuffix = geopipSuffix + '_no_sub'
 outNameLoc, outDistLoc, outTreeLoc = get_out_name_dist_tree_files(dataLoc, suffix=geopipOneSuffix)
-rCodeNj = get_rscript(outNameLoc, outDistLoc, outTreeLoc)
+rCodeNj = get_rscript(outNameLoc, outDistLoc, outTreeLoc, rFileLoc)
 tree_use_r_for_unknown_number_of_leaves(bDictEstGeoPIPOne, pairsList, rCodeNj, dataLoc, outTreeLoc, suffix=geopipOneSuffix, rooted=True)
 
 write_dist_from_bdict(bDictEstGeoPIPOne, dataLoc, suffix=geopipOneSuffix)

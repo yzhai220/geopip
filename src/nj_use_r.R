@@ -13,7 +13,7 @@ outTreeFile = args[3]
 
 # Need ape package.
 ape_require = require(ape)
-if (ape_require == False)
+if (ape_require == FALSE)
 {
     install.packages('ape')
     library(ape)

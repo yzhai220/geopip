@@ -288,14 +288,14 @@ def opt_nlists_rate_all_cluster_inseg_only_msa_drate_fix_drate_times_b(ratesList
     return ratesListNew, segRateDictNew, treeNew
 
 
-def opt_geopip_full(m, p, qMat, segRateDict, piProbRates, ratesList, multiAlign, lenSegs, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, cList, qRates=[1.], suffix='', updateQ=True, updateSeg=True, updateRate=True, updateRateFixdRateTimesTau=True, rooted=True, tol=1.e-2, bTol=1.e-3, iterMax=100):
+def opt_geopip_full(m, p, qMat, segRateDict, piProbRates, ratesList, multiAlign, lenSegs, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, rFileLoc, cList, qRates=[1.], suffix='', updateQ=True, updateSeg=True, updateRate=True, updateRateFixdRateTimesTau=True, rooted=True, tol=1.e-2, bTol=1.e-3, iterMax=100):
     """
     main function for optimization
     updating in segment rates, out segment rates, qMat, bDict iteratively
     we estimate bDict first, so bDict is not needed as input
     """
     outNameLoc, outDistLoc, outTreeLoc = get_out_name_dist_tree_files(dataLoc, suffix)
-    rCodeNj = get_rscript(outNameLoc, outDistLoc, outTreeLoc)
+    rCodeNj = get_rscript(outNameLoc, outDistLoc, outTreeLoc, rFileLoc)
     seqNames = multiAlign.keys()
     msaList = zip(*multiAlign.values())
     print 'simulation run: %s' % (inputLoc)

@@ -141,13 +141,13 @@ def write_dist_from_bdict(bDict, dataLoc, suffix=''):
     write_dist(dMat, outDistLoc)
 
 
-def get_rscript(outNameLoc, outDistLoc, outTreeLoc, rFile='/users/vincent/googledrive/geopip/code/nj_use_r.R'):
+def get_rscript(outNameLoc, outDistLoc, outTreeLoc, rFileLoc):
     """
     get Rstript for constructing NJ tree from distance matrix using R code
     output:
         rCodeNj: string of code to be called by os.system()
     """
-    rCodeNj = ' '.join(['Rscript', rFile, outNameLoc, outDistLoc, outTreeLoc])
+    rCodeNj = ' '.join(['Rscript', rFileLoc+'/nj_use_r.R', outNameLoc, outDistLoc, outTreeLoc])
     return rCodeNj
 
 

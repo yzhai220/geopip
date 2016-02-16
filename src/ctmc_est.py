@@ -67,13 +67,13 @@ def opt_nstr_ctmc_bonly(pairAlignSubsOnly, piProb, qMat, cList, qRates=[1]):
     return m, nllkAll
 
 
-def opt_ctmc_full(qMat, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, cList, qRates=[1], suffix='', updateQ=True, tol=1.e-2, bTol=1.e-3, iterMax=100):
+def opt_ctmc_full(qMat, multiAlign, javaDirectory, modelDirectory, eStepFile, parametersPath, inputLoc, outputLoc, dataLoc, execsLoc, rFileLoc, cList, qRates=[1], suffix='', updateQ=True, tol=1.e-2, bTol=1.e-3, iterMax=100):
     """
     optimization for all parameters in the CTMC model: qMat, tree (bDict)
     update qMat and tree (bDict) iteratively
     """
     outNameLoc, outDistLoc, outTreeLoc = get_out_name_dist_tree_files(dataLoc, suffix)
-    rCodeNj = get_rscript(outNameLoc, outDistLoc, outTreeLoc)
+    rCodeNj = get_rscript(outNameLoc, outDistLoc, outTreeLoc, rFileLoc)
     print 'CTMC estimate for data in: %s' % (inputLoc)
     pairAlignSubsOnly = pair_align_from_multi_align_subs_only(multiAlign)
     piProb = pi_from_qmat(qMat)
