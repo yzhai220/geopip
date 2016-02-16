@@ -1,0 +1,110 @@
+options { JDK_VERSION = "1.5"; STATIC = false; LOOKAHEAD = 10; }
+PARSER_BEGIN(NewickParser)
+package ma.newick;
+
+import nuts.util.Tree;
+import java.util.*;
+import java.io.*;
+import goblin.*;
+
+public class NewickParser 
+{
+	private int unnamedNodeIndex;
+	private Tree<String> tree;
+	private Map<Language, Double> branchLengths;
+	private String nextInternalNodeName()
+	{
+		String result = "internal" + unnamedNodeIndex;
+		unnamedNodeIndex++;
+		return result;
+	}
+	public Tree<String> parse() throws ParseException 
+	{
+		unnamedNodeIndex = 0;
+		branchLengths = new HashMap<Language, Double>();
+		return tree();
+	}
+	public NewickParser(String str)
+	{
+		this(new StringBufferInputStream(str));
+	}
+	public Map<Language, Double> getBranchLengths() { return branchLengths; }
+}
+PARSER_END(NewickParser)
+
+SKIP : { " " |	"\r" |	"\t" |	"\n" }
+TOKEN : 
+{
+  < NUMBER_STRING: ( ["0"-"9",".","E","-"] )+ >
+|	
+  < NODE_NAME_STRING: ( ["a"-"z","A"-"Z","_","-","0"-"9","."] )+ >
+}
+private Tree<String> tree() :         { Tree<String> result; }
+{
+	result = subtree()     
+	";"
+	{ return result; }
+}
+private Tree<String> subtree() :      { Tree result; }
+{
+	result = internal() 
+	{ return result; }
+|
+	result = leaf()     
+	{ return result; } 
+}
+private Tree<String> leaf() :         { String name; }
+{
+	name = name()     
+	{ return new Tree(name); }
+}
+private Tree<String> internal() :     { List<Tree<String>> children; String name; }
+{
+	"("
+	children = branchList()
+	")"
+	name = name()				
+	{ return new Tree<String>(name, children); }
+}
+private List<Tree<String>> branchList() :   
+{ 
+	List<Tree<String>> branches = new ArrayList<Tree<String>>(); 
+	Tree<String> currentTree; 
+}
+{
+	currentTree = branch() 	
+	{ branches.add(currentTree); }
+	( 
+		","
+		currentTree = branch() 	
+		{ branches.add(currentTree); }
+	)*											
+	{ return branches; }
+}
+private Tree<String> branch() : 			{ Tree<String> result; }
+{
+	result = subtree()
+	[ length(result.getLabel()) ]
+	{ return result; }
+}
+private String name() : 			{ Token t; }
+{
+	t = <NODE_NAME_STRING> 	
+	{ return t.image; }
+|
+	{ return nextInternalNodeName(); }
+}
+private void length(String label) : 			{ Token t; }
+{
+	":"
+	t = <NUMBER_STRING>
+	{ 
+		Language lang = new Language(label);
+		Double length = Double.parseDouble(t.image); 
+		branchLengths.put(lang, length);
+	}
+}
+
+
+
+

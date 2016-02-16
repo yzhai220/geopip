@@ -1,0 +1,50 @@
+<project name="fig" default="build" basedir=".">
+  <property name="name" location="fig"/>
+
+  <target name="build">
+  	<!--<mkdir dir="classes"/>
+    <depend srcdir="src" destdir="classes" cache="depcache" closure="yes">
+      <exclude name="**/.backup*"/>
+      <exclude name="**/.backup*/**"/>
+      <include name="**/*.java"/>
+    </depend>
+    <javac srcdir="src" destdir="classes" debug="true">
+      <compilerarg value="-Xlint:deprecation"/>
+      <include name="**/*.java"/>
+    </javac>
+    <rmic classname="fig.record.Receiver" base="classes"/>-->
+    <jar destfile="${name}.jar" basedir="bin-fig"/>
+  </target>
+
+  <target name="install" depends="build">
+    <copy todir="servlet/WEB-INF/lib">
+      <fileset file="${name}.jar"/>
+    </copy>
+  </target>
+	
+	<target name="deploy" depends="build">
+		<scp file="${name}.jar"
+			todir="bouchard@r22.millennium.berkeley.edu:~/jars" 
+			keyfile="${user.home}/.ssh/id_dsa"
+			passphrase=""
+			trust="yes"/>
+    <scp file="${name}.jar"
+      todir="bouchard@bison.westgrid.ca:~/jars" 
+      keyfile="${user.home}/.ssh/id_dsa"
+      passphrase=""
+      trust="yes"/>
+    <scp file="${name}.jar"
+      todir="bouchard@hermes.westgrid.ca:~/jars" 
+      keyfile="${user.home}/.ssh/id_dsa"
+      passphrase=""
+      trust="yes"/>
+	</target>
+
+  <target name="clean">
+    <delete dir="depcache"/>
+    <delete dir="classes"/>
+    <delete file="${name}.jar"/>
+  </target>
+
+  <target name="all" depends="clean,build,install"/>
+</project>

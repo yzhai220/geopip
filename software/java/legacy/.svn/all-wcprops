@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/Ananke/!svn/ver/1401/legacy
+END
+build-scratch.xml
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/Ananke/!svn/ver/29/legacy/build-scratch.xml
+END
+build.xml
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/Ananke/!svn/ver/240/legacy/build.xml
+END
+build-ev.xml
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/Ananke/!svn/ver/29/legacy/build-ev.xml
+END
+build-pepper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/Ananke/!svn/ver/29/legacy/build-pepper.xml
+END
+build-nuts.xml
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/Ananke/!svn/ver/29/legacy/build-nuts.xml
+END
+build-fig.xml
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/Ananke/!svn/ver/29/legacy/build-fig.xml
+END
+build-pty.xml
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/Ananke/!svn/ver/29/legacy/build-pty.xml
+END

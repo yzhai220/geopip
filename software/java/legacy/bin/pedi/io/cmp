@@ -1,0 +1,16 @@
+#!/bin/sh
+ 
+# openbsd 4.9
+# gcc 4.2.1
+# openjdk 1.7.0
+JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:bin/javac::")
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+
+
+javac Test.java
+javah -classpath .:/ubc/cs/home/b/bbkirk/workspace/Pedigrees/src-pedi/ pedi.io.Test
+
+gcc -fPIC -I${JAVA_HOME}/include -shared pedi_io_Test.c -o libpedi_io_Test.so
+
+java -classpath .:/ubc/cs/home/b/bbkirk/workspace/Pedigrees/src-pedi/ pedi.io.Test

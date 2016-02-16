@@ -1,0 +1,42 @@
+<project name="ptychodus" default="build" basedir=".">
+  <property name="name" location="ptychodus"/>
+  <property environment="env"/>
+
+  <target name="build">
+    <!--<mkdir dir="bin"/>
+    <depend srcdir="src" destdir="bin" cache="depcache" closure="yes">
+      <include name="**/*.java"/>
+    </depend>
+    <javac srcdir="src" destdir="bin" debug="true">
+      <compilerarg value="-Xlint:deprecation"/>
+      <include name="**/*.java"/>
+    </javac>-->
+    <jar destfile="${name}.jar" basedir="bin-pty"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="depcache"/>
+    <delete dir="classes"/>
+    <delete file="${name}.jar"/>
+  </target>
+	
+	 <target name="deploy" depends="build">
+	    <scp file="${name}.jar"
+	      todir="bouchard@r22.millennium.berkeley.edu:~/jars" 
+	      keyfile="${user.home}/.ssh/id_dsa"
+	      passphrase=""
+	      trust="yes"/>
+    <scp file="${name}.jar"
+      todir="bouchard@bison.westgrid.ca:~/jars" 
+      keyfile="${user.home}/.ssh/id_dsa"
+      passphrase=""
+      trust="yes"/>
+    <scp file="${name}.jar"
+       todir="bouchard@hermes.westgrid.ca:~/jars" 
+       keyfile="${user.home}/.ssh/id_dsa"
+       passphrase=""
+       trust="yes"/>
+	  </target>
+
+  <target name="all" depends="clean,build"/>
+</project>

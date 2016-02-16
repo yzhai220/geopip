@@ -1,0 +1,35 @@
+digraph Ped_1 {
+size ="11,8.5" ;
+ratio ="fill" ;
+mincross = 2.0 ;
+label="Pedigree 1" ;
+"4" [shape=circle, style=filled,fillcolor=white] ;
+"5" [shape=box,regular=1, style=filled,fillcolor=white] ;
+"6" [shape=box,regular=1, style=filled,fillcolor=white] ;
+"7" [shape=circle, style=filled,fillcolor=grey] ;
+"8" [shape=box,regular=1, style=filled,fillcolor=white] ;
+"9" [shape=box,regular=1, style=filled,fillcolor=grey] ;
+"10" [shape=box,regular=1, style=filled,fillcolor=grey] ;
+"11" [shape=box,regular=1, style=filled,fillcolor=white] ;
+"12" [shape=box,regular=1, style=filled,fillcolor=white] ;
+"1" [shape=box,regular=1, style=filled,fillcolor=grey] ;
+"2" [shape=circle, style=filled,fillcolor=white] ;
+"3" [shape=box,regular=1, style=filled,fillcolor=white] ;
+"3x4"[shape=diamond,style=filled,label="",height=.1,width=.1] ;
+"3" -> "3x4" [dir=none, weight=1] ;
+"4" -> "3x4" [dir=none, weight=1] ;
+"3x4" -> "7" [dir=none, weight=2] ;
+"3x4" -> "8" [dir=none, weight=2] ;
+"3x4" -> "9" [dir=none, weight=2] ;
+"6x7"[shape=diamond,style=filled,label="",height=.1,width=.1] ;
+"6" -> "6x7" [dir=none, weight=1] ;
+"7" -> "6x7" [dir=none, weight=1] ;
+"6x7" -> "10" [dir=none, weight=2] ;
+"6x7" -> "11" [dir=none, weight=2] ;
+"6x7" -> "12" [dir=none, weight=2] ;
+"1x2"[shape=diamond,style=filled,label="",height=.1,width=.1] ;
+"1" -> "1x2" [dir=none, weight=1] ;
+"2" -> "1x2" [dir=none, weight=1] ;
+"1x2" -> "5" [dir=none, weight=2] ;
+"1x2" -> "6" [dir=none, weight=2] ;
+}

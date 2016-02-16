@@ -1,0 +1,35 @@
+
+In directory:
+  ~/projects/variational/code/javacode/legacy/src-pedi/pedi/simulator
+
+
+Parse Hapmap Data
+-----------------
+> ./hapmap_haps_and_recomb.pl 100 1000 sim-long.snps sim-long.haps sim-long.rec
+
+
+Make Pedigree
+-------------
+> ./random_pedigree.pl 4 2 3 30 0.3 test.ped
+> ./random_pedigree.pl 1 10 3 300 0.3 large.ped
+
+> ./random_wf_pedigree.pl 10 10 0.2 1 0 wf.ped
+
+
+Simulate Pedigree Data
+----------------------
+> ./pedsim 1 0.0 1 0.0 0.0 0.0 sim-long.rec.10 sim-long.haps.10 test.ped test.long.ped test.long.dl test.long.ibd
+> ./pedsim 1 0.0 1 0.0 0.0 0.0 sim-long.rec.10 sim-long.haps.10 large.ped large.long.ped large.long.dl large.long.ibd
+
+> ./pedsim 1 0.0 1 0.0 0.0 0.0 sim-long.rec.10 sim-long.haps.10 wf.ped wf.long.ped wf.long.dl wf.long.ibd
+
+
+Hold Out Individuals
+--------------------
+> ./hold_out_genotypes_snps.pl test.ped test.long.ped test.long.ped.hold
+> ./hold_out_genotypes_snps.pl large.ped large.long.ped large.long.ped.hold
+
+
+
+Run Inference
+> ???

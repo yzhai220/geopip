@@ -1,0 +1,51 @@
+options { JDK_VERSION = "1.5"; STATIC = false;   JAVA_UNICODE_ESCAPE = true; }
+PARSER_BEGIN(IpaParser)
+package goblin.ipa;
+
+import java.util.*;
+import java.io.*;
+import goblin.*;
+import nuts.io.*;
+
+
+public class IpaParser 
+{
+  public final IPADatabase db = new IPADatabase();
+
+  public IpaParser(File file) throws FileNotFoundException
+  {
+    this(new FileInputStream(file), "UTF-8");
+  }
+}
+PARSER_END(IpaParser)
+
+SKIP : { " " |  "\r" |  "\t" |  "\n" }
+TOKEN : { < SYMBOL: ( ~["\n"," ","\t","#",",","{","}"] )+ > } 
+
+public void parse() :         { }
+{
+  ( entry() )*
+}
+private void entry() :      { Token t; }
+{
+  t = <SYMBOL>
+  { String s = t.image; }
+  "{"
+  ( feature(s) )*
+  "}"
+}
+private void feature(String ipa) :         { Token featureToken; }
+{
+  featureToken = <SYMBOL>     
+  { 
+    if (ipa.length() == 1)
+      db.associate(ipa.charAt(0), featureToken.image); 
+    else
+      try { IO.so("Warning: ipa symbol " + ipa + " ignored because of length != 1");
+      } catch(Exception e) { }
+  }
+}
+
+
+
+

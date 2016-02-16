@@ -1,0 +1,19 @@
+<project name="legacy" default="build" basedir=".">
+  <property name="name" location="legacy"/>
+  <property name="user.home" location="/home/bouchard"/>
+	
+  <target name="build">
+    <mkdir dir="classes"/>
+    <javac destdir="classes">
+        <src path="src-evolvere" />
+        <src path="src-fig" />
+        <src path="src-pepper" />
+        <src path="src-hgep" />
+        <src path="src-nuts" />
+        <src path="src-pty" />
+    </javac>
+    <!--jar destfile="${name}.jar" basedir="bin-evolvere"/-->
+  </target>
+
+
+</project>

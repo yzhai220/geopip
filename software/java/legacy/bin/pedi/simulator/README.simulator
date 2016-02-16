@@ -1,0 +1,87 @@
+
+
+PedSim
+------
+
+Given a pedigree of individuals, population haplotypes, and
+recombination rates, the simulator draws haplotypes for the founders
+and simulate inheritance for their descendents.
+
+If a disease model is given, a disease SNP is chosen, and the
+affection status is simulated based on that SNP. Otherwise, the
+disease status is unaltered.
+
+
+
+Build
+-----
+
+ > g++ -O3 -o pedsim pedigree-simulator.cpp
+
+
+Run
+---
+
+ > ./pedsim d 0.1 1.9 0.1 0.4 sim.rec_rates sim.haps sim.ped sim.out.ped sim.out.diseaselocus sim.out.ibd
+
+
+
+
+
+
+
+ 
+License Agreement
+-----------------
+
+The computer software known as PedSim (`PedSim' or `The Software') was
+created and developed in the course of research by Ms. Bonnie
+Kirkpatrick, Dr. Richard M. Karp, and Dr. Eran Halperin (`The
+Researchers') at the International Computer Science Institute,
+Berkeley (`ICSI'). ICSI encourages the use of PedSim by researchers in
+academic institutions (`Licensee') for non-commercial research
+purposes subject to the following terms and conditions: By pressing
+the `Agreed and Accepted' button, you and your institution agree to be
+bound by the terms below.
+
+   1. Licensee is hereby granted a non-exclusive, non-transferable
+license to use PedSim for the sole purpose of performing
+non-commercial academic research. Such research shall not include
+research sponsored by a commercial entity.
+
+   2. For the avoidance of doubt it is hereby clarified that the
+license to use PedSim as aforesaid does not include any obligation or
+undertaking to supply any accompanying services or improvements.
+
+   3. Licensee agrees not to distribute or transfer PedSim or any
+portion, copies or derivatives thereof, to another location or to any
+third party.
+
+   4. Licensee agrees not to make any copies except as necessary for
+his exercise of this license in his own laboratory. Any copy shall
+bear an appropriate copyright notice specifying the above-mentioned
+authors and proprietor.
+
+   5. Licensee agrees not to decompile, reverse engineer, disassemble,
+modify and /or create derivative works of the software.
+
+   6. Licensee acknowledges that PedSim is a research tool, still in
+the development stage. Hence, it is not presented as error free,
+accurate, complete, useful, suitable for any specific application or
+free from any infringement of any rights. The Software is licensed AS
+IS, entirely at the Licensee's own risk.
+
+   7. Nothing in this Agreement shall be deemed to be a warranty or
+representation by ICSI or the Researchers, in connection with PedSim
+and its use, including, without limiting the generality of the
+aforesaid, as to the accuracy, safety or fitness for any particular
+use.
+
+   8. The software is provided "as is", without warranty of any kind,
+express or implied, including but not limited to the warranties of
+merchantability, accuracy, fitness for a particular purpose and
+noninfringement. In no event shall the authors or copyright holders of
+PedSim (including ICSI and the researchers) be liable for any claim,
+damages or other liability, whether in an action of contract, tort or
+otherwise, arising from, out of or in connection with the software or
+the use or other dealings in the software.

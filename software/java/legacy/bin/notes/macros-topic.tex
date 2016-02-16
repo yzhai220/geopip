@@ -1,0 +1,105 @@
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{epsfig}
+
+\def\half{\frac{1}{2}}
+
+\def\randomgraph{{\cal G}_{n,\frac{1}{2}}}
+\def\scrp{{\mathscr P}}
+\def\scrc{{\mathscr C}}
+\def\scre{{\mathscr E}}
+
+\newcounter{xxx}
+\setcounter{xxx}{0}
+\newcommand\XXX[1]{{\bf \em \addtocounter{xxx}{1} (\thexxx) [[#1]]}}
+
+% \DeclareMathOperator{\deg}{deg} 
+
+
+
+\def\Q{{\mathbb Q}}        % rationals
+\def\F{{\mathbb F}}        % rationals
+\def\Z{{\mathbb Z}}        % integers
+\def\N{{\mathbb N}}        % naturals
+\def\R{{\mathbb R}}        % reals
+\def\C{{\mathbb C}} 	   % complex
+\def\Rn{{\R^{n}}}          % product of n copies of reals
+\def\Cf{{\mathbf C}}	   % continuous functions on (.)
+
+\def\P{{\mathbb P}}        % probability
+\def\E{{\mathbb E}}        % expectation 
+\def\1{{\mathbf 1}}        % indicator
+\def\var{{\mathop{\mathbf Var}}}    % variance
+
+\def\done{\hfill\rule{2mm}{2mm}}
+
+\def\borel{{\cal B}}    % borel sigmal field
+\def\G{{\cal G}}        % some sigma field
+\def\F{{\cal F}}        % some sigma field
+\def\H{{\cal H}}        % some sigma field
+
+\def\L{{\mathbf L}}     % L, as in L^2
+
+\def\ascv{\stackrel{\scriptscriptstyle a.s.}{\longrightarrow}}     % almost sure convergnece
+\def\pcv{\stackrel{\scriptscriptstyle \P}{\longrightarrow}}        % convergence in P
+\def\ltcv{\stackrel{\scriptscriptstyle\L^2}{\longrightarrow}}      % L2 convergnece
+\def\lpcv{\stackrel{\scriptscriptstyle\L^p}{\longrightarrow}}      % Lp convergnece
+\def\dcv{\stackrel{\scriptscriptstyle d}{\longrightarrow}}         % convergence in d
+\def\deq{\stackrel{\scriptscriptstyle d}{=}}			   % equal in d
+\def\toinf{\to \infty}
+
+\def\ci{\perp\!\!\!\perp}  % conditional independence
+
+% the header/lecture structure...borrowed from alistair sinclair's cs270 format
+% \newcommand{\topic}[3]{
+%    \pagestyle{myheadings}
+%    \thispagestyle{plain}
+%    \newpage
+%    \setcounter{page}{1}
+%    \noindent
+%    \begin{center}
+%    \framebox{
+%       \vbox{\vspace{2mm}
+%     \hbox to 6.28in { {\bf STAT 205~Probability Theory
+%                         \hfill Fall 2006} }
+%        \vspace{4mm}
+%        \hbox to 6.28in { {\Large \hfill Topic: #1 \hfill} }
+%        \vspace{2mm}
+%        \hbox to 6.28in { {\it Lecturer:} Jim Pitman, {\it Scribe:} #2, {\it Editor:} #3 \hfill }
+%       \vspace{2mm}}
+%    }
+%    \end{center}
+%    \markboth{Topic: #1}{Topic: #1}
+%    \vspace*{4mm}
+% }
+       %\hbox to 5.90in { \hfill {\it Scribe: #3} }
+
+
+% \newtheorem{theorem}{Theorem}
+% \newtheorem{lemma}[theorem]{Lemma}
+% \newtheorem{proposition}[theorem]{Proposition}
+% \newtheorem{claim}[theorem]{Claim}
+% \newtheorem{corollary}[theorem]{Corollary}
+% \newtheorem{definition}[theorem]{Definition}
+% \newenvironment{proof}{{\bf Proof:}}{\hfill\rule{2mm}{2mm}}
+% \newenvironment{proofsketch}{{\bf Proof Sketch:}}{\hfill\rule{2mm}{2mm}}
+% \newcommand{\fig}[3]{
+%       \vspace{#2}
+%       \begin{center}
+%       Figure #1:~#3
+%       \end{center}
+% }
+% \newtheorem{exercise}[theorem]{Exercise}
+% \newtheorem{example}[theorem]{Example}
+
+% %some things we'll never understand....alas
+% \setlength{\oddsidemargin}{0.25 in}
+% \setlength{\evensidemargin}{-0.25 in}
+% \setlength{\topmargin}{-0.6 in}
+% \setlength{\textwidth}{6.0 in}
+% \setlength{\textheight}{8.5 in}
+% \setlength{\headsep}{0.75 in}
+% \setlength{\parindent}{0 in}
+% \setlength{\parskip}{0.1 in}
+% \advance\topmargin by 0.5in
+

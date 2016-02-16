@@ -1,0 +1,21 @@
+~/bin/java -classpath .:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/org.hamcrest.core_1.1.0.v20090501071000.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/junit.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/mvel2-2.1.3.Final.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/jblas-1.2.0.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/Jama-1.0.2.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/commons-math-2.2.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/commons-cli-1.0.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/deployment-javaee-full.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/forester.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/jsci-core.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/lucene-core-3.3.0.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/ninja.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/opencsv-2.2.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/servlet-api.jar:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/src-pedi/:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/src-fig/:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/src-fenchel/:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/src-nuts/:/ubc/cs/home/b/bbkirk/code-pedi/javacode/legacy/src-conifer/   conifer.rna.RNAMove -Xms2g -Server -seq "CGCGAAUUCGCG" -start "............" -target "((((....))))" -time "2" -ctmc
+
+
+# -Xms2g -Server -seq "CGCGAAUUCGCG" -start "............" -target "((((....))))" -time "200" -ctmc
+
+
+
+#output1 
+
+#output2 -Xms2g -Server -seq "CCCAAAGGG" -start "..(....)." -target "(((...)))" -time "350" -ctmc
+
+
+
+
+
+
+# -r 
+#-p /ubc/cs/home/b/bbkirk/projects/foldingpaths/ViennaRNA-2.0.7/Progs/
+
+
+java -classpath .:/ubc/cs/research/beta/People/monirh/Ananke/jars/org.hamcrest.core_1.1.0.v20090501071000.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/junit.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/mvel2-2.1.3.Final.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/jblas-1.2.0.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/Jama-1.0.2.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/commons-math-2.2.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/commons-cli-1.0.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/deployment-javaee-full.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/forester.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/jsci-core.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/lucene-core-3.3.0.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/ninja.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/opencsv-2.2.jar:/ubc/cs/research/beta/People/monirh/Ananke/jars/servlet-api.jar:/ubc/cs/research/beta/People/monirh/Ananke/legacy/src-pedi/:/ubc/cs/research/beta/People/monirh/Ananke/legacy/src-fig/:/ubc/cs/research/beta/People/monirh/Ananke/legacy/src-fenchel/:/ubc/cs/research/beta/People/monirh/Ananke/legacy/src-nuts/:/ubc/cs/research/beta/People/monirh/Ananke/legacy/src-conifer/ conifer.rna.RNAMove -Xms2g -Server -seq "CGCGAAUUCGCG" -start "............" -target "((((....))))" -time "4" -ctmc

@@ -1,0 +1,295 @@
+\documentclass {article}
+\usepackage{amssymb,amsmath,mathrsfs}
+\usepackage{algorithm,algorithmic}
+
+\newcommand\eqclass[2]{[#1]_{#2}}
+\DeclareMathOperator{\purity}{pur}
+\DeclareMathOperator{\simi}{sim}
+\DeclareMathOperator{\image}{ima}
+\DeclareMathOperator{\clades}{clades}
+\DeclareMathOperator{\symmd}{symmd}
+\DeclareMathOperator{\parent}{pa}
+\newcommand\lgmap{\psi}
+\newcommand\agreeparam{\theta}
+
+\newcommand\softagree{{\sc Soft-Agree}}
+\newcommand\hardagree{{\sc Hard-Agree}}
+\newcommand\indep{{\sc Indep}}
+
+\newcommand\data{\pmb{x}}
+\newcommand\hidden{\pmb{z}}
+\newcommand\anyvalue{\pmb{y}}
+\newcommand\gene{{\mathrm{g}}}
+\newcommand\lang{{\mathrm{l}}}
+\newcommand\lgvar{{\alpha}}
+
+\newcommand{\ud}{\,\mathrm{d}}
+
+\input{macros-topic}
+
+\title {Joint Model of Languages and Genes}
+\begin{document}
+
+
+\input{USE PTYPAPER INSTEAD}
+
+
+\maketitle
+
+\abstract{
+Variation in genomes and languages share a common evolutionary process, shaped by forces such as migration and mixing. While a number of studies have dealt with the problem of infering the evolutionary relationships using human genetic variation~\cite{xx} or using linguistic variation~\cite{xx} in isolation, we are not aware of previous attempts to pool these two sources of data. 
+We describe in this paper a model that uses the two sources of information jointly to answer more accurately to questions about the topology of the phylogenetic tree and the divergence times.
+% In this note, we describe how problems in linguistic inference can be solved by integrating genetic data. 
+% We show that the use of genetic data leads to more accurate linguistic trees and moreover can be use to infer the times of divergences of languages. 
+% Most previous work on phylogenetic relies on synthetic data to evaluate the performance of the algorithms and models.
+% Here, the linguistic data makes it possible to perform held-out evaluate on real data by comparing results with evidence from independant historical written records and reconstructions from the comparative method.  
+To validate this model, we tried it on a large scale pair of dataset combining the Human Genome Diversity Panel and the World Atlas of Language Structures.  Our results support the use of joint inference, showing an increase over independent inference both in terms of the purity of the obtained tree topology and in terms of the accuracty of the divergence times.  These evaluations were performed by comparing consensus reconstruction with held-out information from historical record and from the comparative method. 
+}
+
+
+\section {Introduction}
+
+- high level picture
+
+- quick overview of datasets that makes that possible
+
+- idea of soft vs. hard agreement, example
+
+The model we describe here takes a Bayesian approach: it encodes this information (that the two trees should look similar but are not necessarily identical) as a prior distribution over pairs of trees.  Other approaches could be used---for example, a penalized likelihood objective function in the spirit of \cite{xx}---but we take the Bayesian approach here mainly because it makes it easy to let the data determines the strength of the agreement (by resampling an hyperparameter---this is discussed in more details in Section~\ref{sec:hyper}).
+
+- prev work
+
+\section {Model description}
+
+
+% Let $\pmb{x}_l=(\pmb{x}_{l,1},\ldots,\pmb{x}_{l,n_l})$ and $\pmb{x}_g=(\pmb{x}_{g,1},\ldots,\pmb{x}_{g,n_g})$ denote a random vector of linguistic and genetic characters observed at $l$ and $g$ sites respectively. 
+Let $t^\gene = (V^\gene, E^\gene, B^\gene)$ be a first tree of human populations with vertices $V^\gene$ (composed of leaves $G\subset V^\gene$ and  internal nodes), edges $E^\gene$, and branch lengths $B^\gene : E^\gene \to (0,\infty)$.  The superscript indicates that this tree models gene variations.  We define similarly a second tree, $t^\lang = (V^\lang, E^\lang, B^\lang$, with leaves $L\subset V^\lang, L\cap G = \emptyset$, modelling language variations.
+
+We assume that a bipartite relation $\lgmap \in 2^{ L \times G }$ is given for the leaves of these trees (for example, by being fairly confident of the native language of each individual in a SNP study).  For $L'\subset L$, we will use the notation $\lgmap(L') = \{i \in G : \exists j\in L' \textrm{ s.t. } (j,i)\in\lgmap\}$.
+
+Let $\data_{s,i}^\lang \in \{1,\dots, k_s\}$ denote a linguistic measurement for site $s$ at leaf $i\in L$ of the linguistic tree.  It is a discrete-valued encoding of a typological datum contained in the WALS dataset.  Let also $\data_{s,i}^\gene \in [0,1]$ denote the frequency of the main allele of SNP $s$ at leaf $i\in G$.  We use a similar notation for hidden, internal nodes $v \in V^\gene - G, v' \in V^\lang - L$ of the tree: $\hidden_{s,v}^\lang, \hidden_{s,v'}^\gene$.
+
+We express the joint probability as the following product of densities:
+
+% {\footnotesize
+% \begin{align*} 
+% \ud \P  &= f(\theta, t^\lang, \data^\lang, t^\gene, \data^\gene) \ud \tau \\
+% &= h(\theta) \ud m  \left(\lambda_{\theta,\lgmap}(t^\lang,t^\gene) \ud \pi^\lang \ud \pi^\gene\right)   \left(f_{t^\lang}^\lgvar(x^\lang) \ud \mu^\lang\right) 
+% \left(f_{t^\gene}^\lgvar(x^\gene) \ud \mu^\gene\right)
+% \end{align*}
+% }
+
+{\footnotesize
+\begin{align*}
+\P\Big(\ud \theta, \ud t^\lang, \ud \data^\lang, \ud t^\gene, \ud \data^\gene\Big) = \;\;\;\;\;\; & \\
+ h(\theta) m(\ud \theta\,) \Bigg\}& \textrm{Prior over agreement strength} \\
+ \times \lambda_{\theta,\lgmap}(t^\lang,t^\gene) \; \pi(\ud t^\lang)  \pi(\ud t^\gene) \Bigg\}& \textrm{Joint tree prior} \\
+\times \Big(f_{t^\lang}^\lang(x^\lang)  \mu^\lang(\ud x^\lang)\Big)
+\Big(f_{t^\gene}^\gene(x^\gene)  \mu^\gene(\ud x^\gene)\Big) \Bigg\}& \textrm{Likelihood models}
+\end{align*}
+}
+
+The form of each factor in this product is described in detail in the following subsections.
+The high-level idea is that an agreement parameter is first sampled, then a pair of tree is sampled jointly, encouraging the trees to agree, finally, for each tree, a likelihood model is used to generate observations.
+
+\subsection{Prior distributions}\label{sec:agreement}
+
+Let $\pi$ be a base measure over trees.  In this section, we remain agnostic regarding the type of tree and the base measure over them.  We did experiments both with unrooted trees with $\pi$ equals to a product of exponential branch length priors (and uniform across topologies), and with ultrametric trees with $\pi$ equals to the coalescent prior.  We discuss the differences in Section~\ref{xx}.  
+
+Given $\pi,\lgmap$, we define a collection of joint priors via an exponential family with base measure $\pi \times \pi$:
+
+\begin{align*} 
+\lambda_{\theta,\lgmap}(t^\lang,t^\gene) &= \exp\left\{ - \theta\cdot \simi_\lgmap(t^\lang,t^\gene) - A_\lgmap(\theta) \right\} \\
+A_\lgmap(\theta) &= \int \int \exp\left\{ - \theta\cdot \simi_\lgmap(t^\lang,t^\gene) \right\} \pi(\ud t^\lang) \pi(\ud t^\gene),
+\end{align*}
+
+where the parameter $\theta \in \Xi = \{\omega \in \R : A_\lgmap(\omega) < \infty\}$ and the sufficient statistic $\simi_\lgmap$ should encode a notion of similarity or agreement between trees.  The similarity should have the property that it is maximized by $t^\lang = t^\gene$.
+
+In our experiments, we used a measure of similarity derived from the well known \emph{symmetric difference} metric over trees \cite{xx}.  In order to write this expression, we first need to set notation for the \emph{clades} induced by a tree, i.e. the sets of partition blocks over leaves induced by removing single edges:
+
+{\footnotesize
+\begin{align*} 
+\clades(t^\lang) = \{ C_e, C'_e : &e\in E^\lang, C_e \sqcup C'_e = L, \\
+&\textrm{ s.t. both } C_e\textrm{ and }C'_e \textrm{ are connected in } E-\{e\}\}.
+\end{align*}
+}
+
+With this definition, we can express the symmetric difference of two trees as:
+
+\begin{align*} 
+\symmd(t,t') &= |\clades(t) \Delta \clades(t')|\\ &= |\clades(t)| + |\clades(t')| - 2|\clades(t) \cap \clades(t')|.
+\end{align*}
+
+We need to modify this slightly to translate the clades of one tree by using $\lgmap$, and to remove the leaves not involved in the mapping from the clades of the other tree.  We extend $\lgmap$ to act on sets of sets, $\lgmap(\{C_i:i\in I\}) = \{\lgmap(C_i):i\in I\}-\{\emptyset\}$, let $\image \lgmap = \{i \in G : \exists j\in L \textrm{ s.t. } (j,i)\in\lgmap\}$ and define:
+
+\begin{align*} 
+\simi_\lgmap(t^\lang,t^\gene) = |\lgmap(\clades(t^\lang))\cap \{C_i\cap \image \lgmap : C_i \in \clades(t^\gene)\}|.
+\end{align*}
+
+Note that this definition of $\simi_\lgmap$ does not depend on branch lengths, and is therefore a simple function.  As a consequence, $\Xi = \R$ whenever $\pi$ is proper.
+
+\subsection{Likelihood models}
+
+Given a fixed tree, the likelihood model scores the observation.  In the case of discrete observations (as for the linguistics dataset),  the likelihood model can be interpreted as the probability of generating the character at the root of the tree, then generating characters at the leaves of the current node recursively until all the observations are generated, and integrating out the hidden nodes involved in the generation process.  The conditional probabilities are obtained by marginalizing paths of a Continous Time Markov Chain (CTMC).  For reversible models, the root placement does not change this likelihood, allowing unrooted trees to be handled easily.
+
+Interestingly, it turns out that such an interpretation does not extend easily to the case where the observations are continuous gene frequencies.
+After reviewing the CTMC model and setting the notation, we explain this difficulty and show how we addressed this issue. 
+
+\subsubsection*{Notation}
+
+For both models, we will write the likelihood density as an expression of the form:
+
+\begin{align*} 
+f_t(\data) = \prod_{\textrm{site }s} \int \tilde f_t(\data_s,\hidden_s) \mu(\ud \hidden_s),
+\end{align*}
+
+where $\mu$ is a product of counting measures for discrete observations, and a product of Lebesgue measures for continuous observations.  We will also use the notation $\anyvalue = (\hidden, \data)$.  Let also $r, \parent : V \to V$ encode an arbitrary orientation of $t = (V,E,B)$, where for each vertex $v$, $\tau(v)$ is the parent of $v$ in a directed tree with root $r$.
+
+\subsubsection*{Discrete observations}
+
+Let $Q$ be a reversible rate matrix with stationary distribution $p$ and $p_u(y,y') = \left(e^{u Q}\right)_{y,y'}$. Then:
+
+\begin{align}\label{eq:ctmclikelihood}
+\tilde f_t(\anyvalue) = p(y_r) \prod_{v \neq r} p_{B(v,\parent(v)}(\parent(v),v), 
+\end{align}
+
+corresponds to the generative interpretation described earlier.
+
+\subsubsection{Continuous observations}
+
+In the continous we will use an expression similar but not identical to Equation~\ref{eq:ctmclikelihood}.  The first obvious difference is that $p_u(y,y')$ is set to a Normal density with mean $y$, variance $u$ and evaluated at $y'$.  
+
+The problem with using the same expression as Equation~\ref{eq:ctmclikelihood} with the Normal kernel comes from the fact that the stationary measure of a Brownian motion on the real line is not finite.  To address this, we instead use the likelihood model defined from:
+
+\begin{align}\label{eq:ctmclikelihood}
+\tilde f_t(\anyvalue) = \prod_{(v,v')\in E} p_{B(v,v')}(v',v), 
+\end{align}
+
+so that for any fixed tree $t$, $A = \int f_t(\data) < \infty$.  Technically, this model genereates $(\data_2 - \data_1, \data_3 - \data_1, \dots, \data_s - \data_1)$ rather than $(\data_1, \data_2, \dots, \data_s)$.  Also, we have $A < 1$ because $\data_{i,s}\in [0,1]$ rather than $\R$, but this still yields a valid joint Markov Random Field.
+
+% We assume initially that linguistic and genetic data are observed in a set of $m$ populations. These vectors are observed at $m$ leaves $(\pmb{X}_l = \pmb{x}_l^1,\ldots,\pmb{x}_l^{m}), (\pmb{X}_g = \pmb{x}_g^1,\ldots,\pmb{x}_g^{m})$. Each of these random vectors is generated by trees $T_l$ and $T_g$ (a tree consists of a topology and branch lengths) with parameters $\Theta_l=(\pi_l, K_l)$ and $\Theta_g=(\pi_g,K_g)$ respectively. We put a prior $\pi$ on $T_l$ and $T_g$. The joint probability of the model:
+% $$\Pr(X_l,X_g,(T_l,\Theta_l),(T_g,\Theta_g)) = \Pr(X_l\vert (T_l,\Theta_l)) \Pr(X_g \vert (T_g,\Theta_g)) \Pr(\Theta_l) \Pr(\Theta_g) \Pr(T_l,T_g)$$
+% 
+% The prior over the two trees is 
+% $$\Pr (T_l, T_g) \propto \pi(T_l) \pi(T_g)  exp(-D(T_l,T_g))$$ wehere $\pi$ denotes the coalescent prior and $D(.,.)$ is a measure of agreeement between the clusters induced by two trees.
+% 
+% The conditional probabilities $\Pr(\pmb{X}_l \vert (T_l, \Theta_l)), \Pr(\pmb{X}_g \vert (T_g, \Theta_g))$ are given by the standard continuous-time Markov process. We sample the trees $(T_l, T_g)$ from their joint posterior $\Pr (T_l, T_g \vert \pmb{X}_l, \pmb{X}_g, \Theta_l, \Theta_g)$ by sampling iteratively from the conditional posteriors $\Pr (T_l \vert T_g, \pmb{X}_l, \Theta_l)$ and  $\Pr (T_g \vert T_l, \pmb{X}_g, \Theta_g)$. 
+% 
+% In the next few sections, we describe the model of evolution of linguistic data, genetic data, the agreement function, and our inference algorithm.
+% 
+% \subsection {Model of linguistic evolution}
+% 
+% The linguistic characters are discrete. We assume that the different linguistic sites evolve independently with each site evolving according to a continuous-time Markov process. 
+% 
+% \subsection {Model of genetic evolution}
+% 
+% The genetic characters are the frequencies of SNPs in a population. $\pmb{x}_g$ is thus a vector in $[0,1]^{n_g}$. We assume that the SNP frequency at each site evolves independently. At each site $i$, the SNP frequency evolves according to a standard Brownian motion.
+% 
+% \subsection {Agreement model}
+% 
+% The agreement function is used to force the lingustic and genetic trees to be similar to each other. We use a simple function that forces the topologeis of the two trees to be similar whie ignoring the branch lengths. Let $L_t = \{L_t^{1},\ldots,L_t^{{n_t}^l}\}$ and $G(t)=\{G_t^{1},\ldots,G_t^{{n_t}^g}\}$ denote the set of clades of languages and genes at time $t$ respectively (with $t=0$ denoting the observed languages and genes). At $t=0$, each clade is a singleton set and we are given a  relation $A_0$ between pairs of languages and genes which contains a pair $(l,g)$ if $l$ is the language spoken by the genetic group $g$. For $t>0$, we define $A_t=\{(L_t^{i},G_t^{j}):\forall l, \exists g, (l,g) \in A_0 \mathrm{ and } \forall g, \exists l (l,g) \in A_0\}$. We define $D(L_t, G_t)$ to be the symmetric difference between $L_t, G_t$, \emph{i.e.}, $D(L_t, G_t) = |L_t \cup G_t| - |A_t|$ (This defintion assumes that every language is mapped to some gene and vice-versa at $t=0$). Finally, we define $D(T_l, T_g) = \sum_{t} D(L_t, G_t)$, where $t$ denote the time of divergence in either of $T_l$ or $T_g$.
+% 
+% \subsubsection{Alternate definition}
+% Let $f(l) = g$ such that $(l,g)\in A_0$, and $f(L_t)$ denote the set of clades where the map is applied to each element of each clade.  We also define the following two sets of clades: $A=\cup_{t>0} G_t$ and $B=\cup_{t>0} f(L_t)$.  Finally, set $D'(T_l,T_g)=|A\Delta B|$.
+% 
+% \subsubsection{The two definitions are different}
+% Note that $D(T_l,T_g)=0$ iff the branch lengths are exactly equal. It is an actual metric on the space of rooted topology+clock branch lengths.  On the other hand, $D'(T_l,T_g)=0$ does not necessarily implies that the branch lengths coincide.  It is only a metric on the space of rooted topology.
+% 
+% \subsection{Prior}
+% To obtain the posterior distribution of $(T_l, T_g)$, we place a prior on $T_l$ and $T_g$. One consideration in our choice of priors is that the prior should permit a tree to be sampled from the posterior in a bottom-up manner. We choose a coalescent prior over each tree. This prior results in a rooted, clock-like tree.
+
+\section {Computations}
+
+Samples from the posterior distribution of the trees are obtained by a Gibbs sampler. 
+\begin{algorithmic}
+\STATE Inititalize $t\leftarrow 0$, $T_l^t$
+\WHILE{not converged}
+\STATE $T_g^{t+1}  \sim \Pr (T_g \vert X_l, X_g, T_l^{t}) $
+\STATE $T_l^{t+1} \sim \Pr (T_l \vert X_l, X_g, T_g^{t+1})$
+\STATE $t \leftarrow t+1$
+\ENDWHILE
+\end{algorithmic}
+
+To sample from the conditional posterior, we use the idea of sequential importance sampling -- we build a sequence of proposal distributions that allow us to sample 
+from larger subtrees that eventually produces a sample from the tree of interest (Thus, this is  a ``pseudo-Gibbs'' sampler in which we approximate the conditional distributions). We now describe how we sample from $\Pr (T_a \vert X_a, X_b, T_b)$ (The idea remains the same whether we sample the gene tree or the language tree). We  represent each tree $T$ by the ordered list of coalescent times, coalescing lineages $( (\delta_1,$. 
+
+\section{Experiments}
+
+\subsection{Description of the datasets}
+
+% std preprocessing of wals, subsampling of snps
+
+We used two datasets for these analyses: the Human Genome Diversity Panel (HGDP), and the World Atlas of Language Structure (WALS).
+
+\subsubsection*{HGDP}
+
+TODO.
+
+\subsubsection*{WALS}
+
+WALS is a language database released online in 2008 \cite{xx} (download date: May 26, 2009) containing 141 \emph{typological} characters for 2561 languages. A typological character is discrete-valued variable that classifies certain linguistic structural features of a given language.  These structural features can be syntactic (for example, does the word order for declarative sentences involving a noun at both the Subject (S) and Object (O) follow the order SVO as in English, SOV as in Japanese, VSO as in Irish, etc.); phonological (what is the number of phonemes in the inventory of the language);  morphological (does the language use reduplication as a grammatical device or not); as well as a few high-level lexical features (for example, the number of basic color categories).  The value of these features for various languages of the world were collected by a team of more than 40 linguists, and each feature was the responsability of a single author (or team).  As a consequence, the dataset is sparse (only 16\% of the entries are known).  The complete list of features and the geographic distribution of the language is shown in Figure XX.
+
+The first use in computational linguistics of this type of data was in \cite{dunns}, where the method was first validated on the Oceanic language family (where the phylogeny was extensively investigated using the comparative method \cite{blust, pauls, etc}), and then applied to the otherwise unrelatable Papuan languages.  In contrast to methods based on exclusively lexical character, which seem to be limited to shallow analyses (Dunns evaluates the horizon to be at about ten thousands years), approaches based on typological features can be used to resolve deeper phylogenetic structures.  
+
+WALS itself was used by Daume \cite{xx} to reconstruct Indo-European and world-wide phylogenetic trees.  We follow the same preprocessing steps that he reported in \cite{xx}, and the same evaluation strategy, based on the \emph{purity} with respect to known language groups.  Purity is described in Section~\ref{sec:topo-exp}.
+
+
+
+
+
+% show mapping, source: ethnologue
+
+\subsubsection*{Language-gene mapping and effective population sizes}
+
+The other pieces of information needed for our analyses are a language-gene mapping, and the effective population sizes (the latter is needed only for Section~\ref{sec:time-exp}).  The former was constructed from the \emph{ethnologue} \cite{xx}, an encyclopedic reference of the languages of the world, and is shown in Table XX.  This is the bijection $\lgmap : L \to G$ referred in Section~\ref{sec:agreement}.  More precisely, it is a bijection when restricted on the domain---for some of the languages (respectively, population), no equivalent can be found in the set of HGDP populations (respectively, WALS languages).
+
+We used this mapping to create the following two subsets of the WALS data (see Table XX): the \emph{West Eurasian} subset,  containing the Indo-European languages in $\lgmap^{-1}(G)$, but also the non Indo-European languages in $\lgmap^{-1}(G)$ that are spoken in the same area (for example Dravidian languages, and isolates such as Basque); and the \emph{Worldwide} subset, containing all the languages in $\lgmap^{-1}(G)$.
+
+Eff Pop Size: TODO
+
+\subsection{Tree topology}\label{sec:topo-exp}
+
+In this section, we show that encouraging soft agreement using the model described in Section~\ref{sec:agreement} yields more accurate posterior tree topologies.  More precisely, we compare the purity of the consensus tree obtained from the following three methods: \indep, which analyse WALS and HGDP independently; \softagree, the model described in Section~\ref{sec:agreement}; and \hardagree, which restricts the biological and linguistic topologies to be identical (but allows differences in branch lengths).
+
+\subsubsection*{Evaluation}
+
+The purity $\purity(t,c)$ of a dendrogram $t$ with respect to a classification $c_l$ available for each leaf $l\in\{1,\dots n\}$ was defined in \cite{xx} as the result of the following process: `` 
+Pick 
+a leaf $l$ uniformly at random; pick another leaf $j$ uniformly in 
+the same class, i.e. $c_l = c_j$. Find the smallest subtree containing 
+$l$ and $j$. Measure the fraction of leaves in that subtree which are 
+in the same class ($c_l$). The expected value of this fraction is the 
+dendrogram purity, and can be computed exactly in a bottom 
+up recursion on the dendrogram. The purity is 1 iff all leaves in 
+each class are contained in some pure subtree.''
+Extending this definition to unrooted trees is simple: let $C_{l,l'}(t)$ denote the smallest clade derived from $t$ that contains both $l$ and $l'$, $\eqclass{l}{c} = \{j : c_j = c_l\}$, and define the purity as:
+
+\begin{align*} 
+\purity(t,c) &= \frac{1}{|\{l:|\eqclass{l}{c}|>1\}|} \sum_{l:|\eqclass{l}{c}|>1} \frac{1}{|\eqclass{l}{c}| -1} \sum_{l'\in\eqclass{l}{c}:l\neq l'} \purity_{l,l'}(t,c) \\
+\purity_{l,l'}(t,c) &= \frac{|\eqclass{l}{c} \cap C(l,l')|}{|C(l,l')|}.
+\end{align*}
+
+In this case, the known classification $c$ comes from annotations available in the WALS dataset.  They correspond to undisputed language families and genera.  See Table XX.
+
+\subsubsection*{Experimental conditions}
+
+In all experiments, we used simulated tempering with four chains \cite{xx}, initialized the chains from the fast particle filter sampler of \cite{xxx}, and constructed a consensus tree from the MCMC samples.
+In the \emph{Worldwide} setting, we ran the chain for 10M iterations, in the \emph{West Eurasian} setting, we ran it for 100k iterations (where one iteration consists of proposing a move in the first tree, then in the second tree, then to propose a swap between a pair of chains at different temperatures).  We monitored the acceptance rates of each proposal distributions, the likelihood as a function of the number of iteration and the purity of the reconstruction as a function of the number of iterations to ensure convergence.
+
+\subsubsection*{Quantitative results}
+
+The tree topology evaluation results are shown in Table XX. Encouragingly, in all cases \softagree\ is among the best approaches.  This is most apparent in the \emph{West Eurasian} setting, where we observed a 31\% relative increase over \indep\ in purity if either \softagree\ and \hardagree\ is used.  In the \emph{West Eurasian} case, the evaluation set at hand does not differentiate \softagree\ and \hardagree\, but in the \emph{worldwide} setting, \softagree\ does outperform \hardagree\ by a modest 8\% relative purity increase.  We believe that the smaller differences observed in the \emph{worlwide} experiment are due to the choice of tree distance used in the construction of our prior.  We discuss this issue in more detail in Section~\ref{futurework}.
+
+Note that purity numbers are comparable only across columns for a fixed row (approaches used for reconstruction); this is because the task of optimizing purity in the \emph{West European} setup is easier than in the \emph{Worldwide} setup (the latter space of tree being much larger).
+
+
+
+\subsection{Time estimates}\label{sec:time-exp}
+
+todo.. experiments with heldout intervals
+
+\subsection{Analysis of the predictions made by the trees and dates}
+
+todo.. show the trees we obtain with our informed prior vs. tree with std exponential prior
+
+\end{document}

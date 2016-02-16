@@ -1,0 +1,18 @@
+
+
+> ./make_superlink  sim.out.ped sim.out.ped.sl
+
+> ./make_locus_files.pl 4 sim.rec_rates sim.haps locus.
+#./make_locus_files.pl $num_sites $rec_rates $haps locus.
+
+
+
+To run Merlin's non-parametric linkage analysis:
+------------------------------------------------
+
+Download merlin to this directory and install so that it is located at "merlin-1.1.2/merlin"
+
+> ./run_merlin.pl 4 sim.out.ped sim.rec_rates sim.out.ped.merlin
+
+> cat sim.out.ped.merlin
+gives the LOD scores for each of the SNPs

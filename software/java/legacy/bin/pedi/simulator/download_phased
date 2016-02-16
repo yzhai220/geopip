@@ -1,0 +1,17 @@
+#!/usr/bin/perl
+
+use strict;
+
+
+for (my $i = 1;  $i <= 22;  $i++)
+{
+  #my $filename = "hapmap3_r2_b36_fwd.consensus.qc.poly.chr$i"."_ceu.phased.gz";
+  #my $filename = "hapmap3_r2_b36_fwd.consensus.qc.poly.chr$i"."_ceu.D.phased.gz";
+  my $filename = "hapmap3_r2_b36_fwd.consensus.qc.poly.chr$i"."_ceu.unr.phased.gz";
+  #my $filename = "hapmap3_r2_b36_fwd.consensus.qc.poly.chr$i"."_yri.phased.gz";
+  #my $filename = "hapmap3_r2_b36_fwd.consensus.qc.poly.chr$i"."_mkk.unr.phased.gz";
+
+  `lynx -source http://hapmap.ncbi.nlm.nih.gov/downloads/phasing/2009-02_phaseIII/HapMap3_r2/CEU/UNRELATED/$filename > $filename`; 
+  #`lynx -source http://hapmap.ncbi.nlm.nih.gov/downloads/phasing/2009-02_phaseIII/HapMap3_r2/MKK/UNRELATED/$filename > $filename`; 
+  `gunzip $filename`;
+}

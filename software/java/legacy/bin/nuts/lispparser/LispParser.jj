@@ -1,0 +1,57 @@
+options { JDK_VERSION = "1.5"; STATIC = false; }
+PARSER_BEGIN(LispParser)
+package nuts.lispparser;
+
+import nuts.util.Tree;
+import java.util.*;
+import java.io.*;
+
+public class LispParser 
+{
+	public Tree<String> parse() throws ParseException 
+	{
+		return tree();
+	}
+	public LispParser(String str)
+	{
+		this(new StringBufferInputStream(str));
+	}
+}
+PARSER_END(LispParser)
+
+SKIP : { " " |	"\r" |	"\t" |	"\n" }
+TOKEN : 
+{
+	< NODE_NAME_STRING: ( ["a"-"z","A"-"Z","_","-","0"-"9"] )+ >
+}
+private Tree<String> tree() :         { Tree<String> result; }
+{
+	result = complex()     
+	{ return result; }
+|
+  result = simple()
+  { return result; }
+}
+private Tree<String> simple() : { Token t; }
+{
+  t = <NODE_NAME_STRING>
+  { return new Tree<String>(t.image); }
+}
+private Tree<String> complex() : 
+{
+  Token t; 
+  List<Tree<String>> children = new ArrayList<Tree<String>>(); 
+  Tree<String> current; 
+}
+{
+  "("
+  t = <NODE_NAME_STRING>
+  (
+    current = tree()
+    { children.add(current); }
+  )*
+  ")"
+  { return new Tree<String>(t.image, children); }
+}
+
+
