@@ -89,7 +89,7 @@ treeTrue = dendropy.Tree.get_from_string(treeStr, schema="newick")
 
 # Simulation using the GeoPIP model.
 # Number of segments, to be fixed as nSeg.
-nSeg = 5
+nSeg = 20
 # A geometric number of segments will be generated if nSeg is not provided,
 sim_tree(treeTrue, p, ratesList, piProbRates, piProb, qMat, cList, fixSegNumber=nSeg)
 # Keep only sequences at leaves for inference.
