@@ -209,14 +209,16 @@ write_dist_from_bdict(bDictEstGeoPIPOne, dataLoc, suffix=geopipOneSuffix)
 # Post-processing.
 # All trees.
 treeNames = ['ctmc_1rate', 'ctmc_4rate', 'phyml_1rate', 'phyml_4rate', 'pip', 'pip_no_sub', geopipSuffix[1:], geopipOneSuffix[1:]]
+tns = dendropy.TaxonNamespace()
 
-# Scale all trees.
+# Get all trees.
 treeAllNonScaled = []
 treeAllScaled = []
 for treeName in treeNames:
     treeFile = dataLoc+'/tree_' + treeName + '.txt'
-    treeTemp = dendropy.Tree.get_from_path(treeFile, schema='newick')
-    treeAllNonScaled.append(deepcopy(treeTemp))
+    treeTemp = dendropy.Tree.get_from_path(treeFile, schema='newick', taxon_namespace=tns)
+    treeAllNonScaled.append(treeTemp)
+    treeTemp = dendropy.Tree.get_from_path(treeFile, schema='newick', taxon_namespace=tns)
     treeTemp.scale_edges(1. / treeTemp.length())
     treeAllScaled.append(treeTemp)
 

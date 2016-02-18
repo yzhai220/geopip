@@ -7,6 +7,8 @@ from copy import deepcopy
 import re
 from itertools import combinations
 
+from dendropy.calculate import treecompare
+
 
 def get_value_after_print_line(oneFile, printStr, preStr=None, emptyLineBound=5):
     emptyLine = 0
@@ -119,10 +121,10 @@ def dist_tree_all(treeFiles, treeTrueFile):
     distSym = []
     for treeFile in treeFiles:
         tree = dendropy.Tree.get_from_path(treeFile, schema='newick')
-        distSym.append(treeTrue.symmetric_difference(tree))
-        distRf.append(treeTrue.robinson_foulds_distance(tree))
+        distSym.append(treecompare.symmetric_difference(treeTrue, tree))
+        distRf.append(treecompare.weighted_robinson_foulds_distance(treeTrue, tree))
         tree.scale_edges(1. / tree.length())
-        distRfScaled.append(treeTrueScaled.robinson_foulds_distance(tree))
+        distRfScaled.append(treecompare.weighted_robinson_foulds_distance(treeTrueScaled, tree))
     return distRf, distRfScaled, distSym
 
 
@@ -181,11 +183,11 @@ def dist_among_trees(treeDict):
     """
     res = {}
     for treeName1 in treeDict.keys():
-        tree1 = deepcopy(treeDict[treeName1])
+        tree1 = treeDict[treeName1]
         res[treeName1] = {}
         for treeName2 in treeDict.keys():
-            tree2 = deepcopy(treeDict[treeName2])
-            res[treeName1][treeName2] = tree1.robinson_foulds_distance(tree2)
+            tree2 = treeDict[treeName2]
+            res[treeName1][treeName2] = treecompare.weighted_robinson_foulds_distance(tree1, tree2)
     return res
 
 
@@ -195,11 +197,11 @@ def dist_among_trees_sym(treeDict):
     """
     res = {}
     for treeName1 in treeDict.keys():
-        tree1 = deepcopy(treeDict[treeName1])
+        tree1 = treeDict[treeName1]
         res[treeName1] = {}
         for treeName2 in treeDict.keys():
-            tree2 = deepcopy(treeDict[treeName2])
-            res[treeName1][treeName2] = tree1.symmetric_difference(tree2)
+            tree2 = treeDict[treeName2]
+            res[treeName1][treeName2] = treecompare.symmetric_difference(tree1, tree2)
     return res
 
 
@@ -211,9 +213,9 @@ def all_dist_among_trees(treeDict):
     keys = treeDict.keys()
     comb = combinations(keys, 2)
     for treeName1, treeName2 in comb:
-        tree1 = deepcopy(treeDict[treeName1])
-        tree2 = deepcopy(treeDict[treeName2])
-        res.append(tree1.robinson_foulds_distance(tree2))
+        tree1 = treeDict[treeName1]
+        tree2 = treeDict[treeName2]
+        res.append(treecompare.weighted_robinson_foulds_distance(tree1, tree2))
     return res
 
 
@@ -227,7 +229,7 @@ def all_dist_among_trees_sym(treeDict):
     for treeName1, treeName2 in comb:
         tree1 = deepcopy(treeDict[treeName1])
         tree2 = deepcopy(treeDict[treeName2])
-        res.append(tree1.symmetric_difference(tree2))
+        res.append(treecompare.symmetric_difference(tree1, tree2))
     return res
 
 

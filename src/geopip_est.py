@@ -311,6 +311,7 @@ def opt_geopip_full(m, p, qMat, segRateDict, piProbRates, ratesList, multiAlign,
     outTreeFile = inputLoc + '/' + 'all.tree.txt'
     dict_write_align_fasta(multiAlign, outAlignFile)
     write_tree(tree, outTreeFile)
+    tree.reroot_at_midpoint()
     dif = 1.e10
     bDictRelativeDif = 1
     iterNum = 1
@@ -318,9 +319,7 @@ def opt_geopip_full(m, p, qMat, segRateDict, piProbRates, ratesList, multiAlign,
     # nllkDif = 1
     while ((dif > tol) and (bDictRelativeDif > bTol) and (iterNum < iterMax)):
         if updateSeg:
-            print '### update Segmentation ###'
-            # FILL HERE!!! NEED TO UPDATE alignsInSeg, p, piProbRates
-            # THIS IS FOR A PAIR OF TWO SEQUENCES ONLY
+            print '### update segmentation ###'
             lenSegs, rateSegs = mle_seg_len_rate(p, msaList, ratesList, seqNames, tree, qMat, piProb, piProbRates, cList)
             nSeg = len(rateSegs)
             alignsInSeg, segRateDict = update_segmentation_in_align_in_seg(lenSegs, rateSegs, ratesList, multiAlign)
@@ -398,6 +397,7 @@ def opt_geopip_full(m, p, qMat, segRateDict, piProbRates, ratesList, multiAlign,
         print 'iter=%s: rates in seg diff = %s, rates in seg diff (fix dRate*tau) = %s, Q diff = %s, b diff = %s' % (iterNum, dRateRelativeDif, dRateRelativeDifFixdRateTimesTau, qMatRelativeDif, bDictRelativeDif)
         # print 'iter=%s: rates in seg diff = %s, Q diff = %s, b diff = %s' % (iterNum, segRateDif, qMatDif, bDictDif)
         dif = max(dRateRelativeDif, dRateRelativeDifFixdRateTimesTau, qMatRelativeDif, bDictRelativeDif)
+        tree.reroot_at_midpoint()
         nllkNew = nllk_msa_geopip_final(ratesList, segRateDict, multiAlignAllSeg, tree, piProb, qMat, cList, piProbRates, p, rateSegs)
         nllkDif = -nllkNew + nllk
         nllkOld = nllk

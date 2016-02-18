@@ -245,15 +245,16 @@ output_rate_with_msa(multiAlign, rateCatAtEachLoc, dataLoc + '/msa_rate' + suffi
 
 # All trees considered.
 treeNames = ['true', 'ctmc_1rate', 'phyml_1rate', 'pip', suffix1[1:], suffix2[1:]]
-
+tns = dendropy.TaxonNamespace()
 
 # Get all trees.
 treeAllNonScaled = []
 treeAllScaled = []
 for treeName in treeNames:
     treeFile = dataLoc+'/tree_' + treeName + '.txt'
-    treeTemp = dendropy.Tree.get_from_path(treeFile, schema='newick')
-    treeAllNonScaled.append(deepcopy(treeTemp))
+    treeTemp = dendropy.Tree.get_from_path(treeFile, schema='newick', taxon_namespace=tns)
+    treeAllNonScaled.append(treeTemp)
+    treeTemp = dendropy.Tree.get_from_path(treeFile, schema='newick', taxon_namespace=tns)
     treeTemp.scale_edges(1. / treeTemp.length())
     treeAllScaled.append(treeTemp)
 

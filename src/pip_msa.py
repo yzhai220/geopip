@@ -187,15 +187,15 @@ def ftilde_recursion_given_tree(msa, seqNames, treeWithBeta, qMatExt, piProbExt,
     nonEmptySeqNames = [seqNames[index] for index in xrange(nSeq) if msa[index] != '-']
     # Youngest node in set A in PIP paper.
     if not isCPhi:
-        nonZeroFvNodesYoungest = treeWithBeta.mrca(taxon_labels=nonEmptySeqNames)
+        nonZeroFvNodesYoungest = deepcopy(treeWithBeta).mrca(taxon_labels=nonEmptySeqNames)
+        node = [node for node in treeWithBeta.postorder_node_iter() if node.index == nonZeroFvNodesYoungest.index][0]
         # Set A in the PIP paper.
         # TODO: replace this with an existing method?
-        nonZeroFvNodes = node_path(nonZeroFvNodesYoungest, treeWithBeta.seed_node)
-        # Test if A is correct.
+        nonZeroFvNodes = node_path(node, treeWithBeta.seed_node)
     # TODO: improve this part by revising for leaves, internal nodes, and root.
     for node in treeWithBeta.postorder_node_iter():
         if node.is_leaf():
-            nodeName = node.get_node_str()
+            nodeName = node._get_node_token()
             ch = seqChDict[nodeName]
             fTildeVec, fTilde = ftilde_leaf(piProbExt, ch, nChExt, cListExt)
             beta = node.beta
@@ -247,15 +247,19 @@ def pv_and_beta_given_tree(tree, dRate):
     iterNodes = tree.preorder_node_iter()
     root = iterNodes.next()    # First one is the root.
     root.pv = dRateInverse * nuBar
+    index = 0
+    root.index = index
     # For root, set beta = 1, then fv shares the same formula in (4) and (5).
     root.beta = 1
     for node in iterNodes:   # all others
+        index += 1
         node.pv = node.edge_length * nuBar
         bMu = node.edge_length * dRate
         if bMu <= 0:
             node.beta = 0
         else:
             node.beta = 1. / bMu * (1 - np.exp(-bMu))
+        node.index = index
 
 
 def pc_from_tree_with_pv_and_fv(treeWithPvAndFv):
@@ -272,7 +276,7 @@ def pc_from_tree_with_pv_and_fv(treeWithPvAndFv):
     return pc
 
 
-# TODO: move pv and beta calculation outside
+# TODO: move pv and beta calculation outside to improve efficiency.
 def prob_msa_one_site(msa, seqNames, tree, qMatExt, piProbExt, dRate, cListExt):
     """
     calculate P(C=c), i.e., probability of multiple string alignment of one site
@@ -322,6 +326,8 @@ def logprob_msa(multiAlign, tree, qMat, piProb, iRate, dRate, cList, qRates=[1.]
     output:
         logProbM: float, log probability of the MSA
     """
+    # # Make sure that the tree is rooted.
+    # tree.reroot_at_midpoint()
     seqNames = multiAlign.keys()
     nLeaf = len(seqNames)
     msaList = zip(*multiAlign.values())

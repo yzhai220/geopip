@@ -253,6 +253,7 @@ def opt_pip_full(rate, qMat, multiAlign, javaDirectory, modelDirectory, eStepFil
     outTreeFile = inputLoc + '/' + 'all.tree.txt'
     dict_write_align_fasta(multiAlign, outAlignFile)
     write_tree(tree, outTreeFile)
+    tree.reroot_at_midpoint()
     dif = 1.e10
     bDictRelativeDif = 1
     iterNum = 1
@@ -307,6 +308,7 @@ def opt_pip_full(rate, qMat, multiAlign, javaDirectory, modelDirectory, eStepFil
         # dif = max(iRateRelativeDif, qMatRelativeDif, bDictRelativeDif)
         print 'iter=%s: dRate diff = %s, dRate diff (fix dRate*b) = %s, Q diff = %s, bDict diff = %s' % (iterNum, dRateRelativeDif, dRateRelativeDifFixdRateTimesb, qMatRelativeDif, bDictRelativeDif)
         dif = max(dRateRelativeDif, qMatRelativeDif, bDictRelativeDif, dRateRelativeDifFixdRateTimesb)
+        tree.reroot_at_midpoint()
         nllkNew = nllk_rate(rate, multiAlign, tree, qMat, piProb, cList)
         nllkDif = nllk - nllkNew
         print 'llk increase =', nllkDif

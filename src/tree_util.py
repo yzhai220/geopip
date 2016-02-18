@@ -5,8 +5,8 @@ import numpy as np
 import random as rd
 import codecs
 import dendropy
+from dendropy.calculate import treemeasure
 import os
-from copy import deepcopy
 
 
 def sim_tree_newick(nLeaves, prefix='seq', bLenDist='uniform', bLenParam=[0, 0.1], bLenDecimal=4):
@@ -161,12 +161,8 @@ def nj_tree_from_bdict_using_r(rCodeNj, bDict, dataLoc, outTreeLoc, suffix='', r
     tree = dendropy.Tree.get_from_path(outTreeLoc, schema='newick')
     if rooted:
         tree.reroot_at_midpoint()
-    # need to read as a string again for some reason in dendropy library
-    tree = dendropy.Tree.get_from_string(tree.as_newick_string(), schema="newick")
-    # write rooted tree into the file, if rooted
-    # treeFile = codecs.open(outTreeLoc, 'w+', 'utf-8')
-    # treeFile.write(tree.as_string('newick'))
-    # treeFile.close()
+    # Need to read as a string again for some reason in dendropy library.
+    # tree = dendropy.Tree.get_from_string(tree._as_newick_string(), schema="newick")
     return tree
 
 
@@ -180,7 +176,7 @@ def bdict_from_tree(tree, pairs):
         bDict: dict, pair -> distance
     """
     bDict = {}
-    pdm = dendropy.treecalc.PatristicDistanceMatrix(deepcopy(tree))
+    pdm = treemeasure.PatristicDistanceMatrix(tree)
     for pair in pairs:
         seq1Name, seq2Name = pair
         # print pdm(tree.find_node_with_taxon_label(seq1Name).taxon, tree.find_node_with_taxon_label(seq2Name).taxon)

@@ -44,6 +44,7 @@ updateQ = True
 resultFolder = dir_main + '/result/geopip_test'
 if not os.path.exists(resultFolder):
     os.makedirs(resultFolder)
+
 os.chdir(resultFolder)
 # Substitution model directory.
 modelDirectory = dir_main + '/model/gtr-model'
@@ -54,10 +55,12 @@ javaDirectory = dir_main + '/software/java'
 execsLoc = resultFolder + '/state/execs'
 if not os.path.exists(execsLoc):
     os.makedirs(execsLoc)
+
 # Exact result folder for every run.
 subFolderPath = resultFolder + '/runs'
 if not os.path.exists(subFolderPath):
     os.makedirs(subFolderPath)
+
 rFileLoc = dir_source
 
 ###############################################################################
@@ -89,7 +92,7 @@ treeTrue = dendropy.Tree.get_from_string(treeStr, schema="newick")
 
 # Simulation using the GeoPIP model.
 # Number of segments, to be fixed as nSeg.
-nSeg = 20
+nSeg = 5
 # A geometric number of segments will be generated if nSeg is not provided,
 sim_tree(treeTrue, p, ratesList, piProbRates, piProb, qMat, cList, fixSegNumber=nSeg)
 # Keep only sequences at leaves for inference.
@@ -224,14 +227,16 @@ output_rate_with_msa(multiAlign, rateCatAtEachLoc, dataLoc + '/msa_rate_geopip.t
 
 # All trees considered.
 treeNames = ['true', 'phyml_1rate', 'ctmc_1rate', 'pip', 'geopip_true_start', 'geopip']
+tns = dendropy.TaxonNamespace()
 
 # Get all trees.
 treeAllNonScaled = []
 treeAllScaled = []
 for treeName in treeNames:
     treeFile = dataLoc+'/tree_' + treeName + '.txt'
-    treeTemp = dendropy.Tree.get_from_path(treeFile, schema='newick')
-    treeAllNonScaled.append(deepcopy(treeTemp))
+    treeTemp = dendropy.Tree.get_from_path(treeFile, schema='newick', taxon_namespace=tns)
+    treeAllNonScaled.append(treeTemp)
+    treeTemp = dendropy.Tree.get_from_path(treeFile, schema='newick', taxon_namespace=tns)
     treeTemp.scale_edges(1. / treeTemp.length())
     treeAllScaled.append(treeTemp)
 

@@ -5,7 +5,7 @@ import random as rd
 from bisect import bisect
 from copy import deepcopy
 import itertools
-import dendropy
+from dendropy.calculate import treemeasure
 
 from pip_util import pi_from_qmat
 
@@ -198,12 +198,12 @@ def leaf_data_from_sim_tree(tree):
     # notAlignSeqs = {}
     ts = {}
     treeTem = deepcopy(tree)
-    pdm = dendropy.treecalc.PatristicDistanceMatrix(treeTem)
-    leafNodes = tree.leaf_nodes()
+    pdm = treemeasure.PatristicDistanceMatrix(treeTem)
+    leafNodes = treeTem.leaf_nodes()
     lanNames = [leafNode.taxon.label for leafNode in leafNodes]
     lanNames.sort()
     lanPairsIter = itertools.combinations(lanNames, 2)
-    segRateDict = get_seg_rate_dict(lanNames, tree)
+    segRateDict = get_seg_rate_dict(lanNames, treeTem)
     segIds = segRateDict.keys()
     segIds.sort()
     nSegs = len(segIds)
@@ -214,7 +214,7 @@ def leaf_data_from_sim_tree(tree):
         segRateDict[segIdNew] = segRateDict.pop(segId)
     # get simple sequences without alignment
     for lanName in lanNames:
-        node = tree.find_node_with_taxon_label(lanName)
+        node = treeTem.find_node_with_taxon_label(lanName)
         seqs[lanName] = node.value
         # notAlignSeqs[lanName] = get_dna_seq(node.value)
     # get multiple alignment
@@ -230,8 +230,8 @@ def leaf_data_from_sim_tree(tree):
     for lanPair in lanPairsIter:
         lanName1 = lanPair[0]
         lanName2 = lanPair[1]
-        node1 = tree.find_node_with_taxon_label(lanName1)
-        node2 = tree.find_node_with_taxon_label(lanName2)
+        node1 = treeTem.find_node_with_taxon_label(lanName1)
+        node2 = treeTem.find_node_with_taxon_label(lanName2)
         segs1 = node1.value
         segs2 = node2.value
         alignInSeg[lanPair] = get_dna_align(segs1, segs2)

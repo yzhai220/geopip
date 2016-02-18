@@ -11,7 +11,7 @@ def subtree_retain_taxa_with_labels(treeFull, labels):
     """
     treeFullCopy = deepcopy(treeFull)
     treeFullCopy.retain_taxa_with_labels(labels)
-    treeFullCopy.delete_outdegree_one_nodes()
+    treeFullCopy.suppress_unifurcations()
     treeStr = treeFullCopy.as_string(schema='newick')
     index1 = treeStr.rfind(':')
     index2 = treeStr.rfind(')')
