@@ -15,7 +15,7 @@ outTreeFile = args[3]
 ape_require = require(ape)
 if (ape_require == FALSE)
 {
-    install.packages('ape')
+    install.packages('ape', repos = 'http://cran.stat.sfu.ca/')
     library(ape)
 }
 
