@@ -10,7 +10,15 @@ Email: y.zhai@stat.ubc.ca, bouchard@stat.ubc.ca
 
 ################################################################################
 
-Python, Java and R are required for running the scripts. Python package ‘dendropy’ is required for some scripts.
+Python, Java and R are required for running the scripts. Make sure that you have
+
+1. Java SE Development Kit 8 (JDK) installed.
+
+2. R installed, and Rscript callable from the command line directly. You may need to install the newest version of R before running the scripts.
+
+3. R package 'ape' installed.
+
+4. Python package 'dendropy' installed.
 
 Software PhyML, INDELible and MUSCLE are included with this release for comparison purpose. See http://www.atgc-montpellier.fr/phyml/, http://abacus.gene.ucl.ac.uk/software/indelible/ and http://www.drive5.com/muscle/ for more information.
 
