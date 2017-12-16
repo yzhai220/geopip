@@ -123,7 +123,7 @@ def nllk_msa_geopip_final(ratesList, segRateDict, multiAlignAllSeg, tree, piProb
         nllk += nllk_nlists_rate_cluster_inseg_only_msa(rate, segIdsInOneCluster, multiAlignAllSeg, tree, piProb, qMat, cList)
     # IMPROVE!!!
     q = 1 - p
-    nllk += - (len(segRateDict) - 1) * np.log(p) - np.log(q)
+    nllk += - (len(segRateDict) - 1) * np.log(q) - np.log(p)
     rateSegsCount = np.array([rateSegs.count(i) for i in xrange(len(ratesList))])
     nllk += - np.sum(np.log(piProbRates) * rateSegsCount)
     return nllk
